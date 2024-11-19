@@ -29,7 +29,7 @@ public class StudentAddRequest {
     private String group;
 
     @Size(min = MIN_GRADE, max = MAX_GRADE)
-    @JsonProperty("group")
+    @JsonProperty("average_grade")
     private Double averageGrade;
 
 }
