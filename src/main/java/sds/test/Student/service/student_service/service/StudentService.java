@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sds.test.Student.service.student_service.dto.*;
 import sds.test.Student.service.student_service.exceptions.model.ConflictRequestException;
+import sds.test.Student.service.student_service.exceptions.model.NotFoundException;
 import sds.test.Student.service.student_service.mapper.StudentMapper;
 import sds.test.Student.service.student_service.model.Student;
 import sds.test.Student.service.student_service.storage.StudentRepository;
@@ -48,9 +49,23 @@ public class StudentService {
     }
 
     public StudentUpdateDto updateStudent(String id, StudentUpdateRequest request) {
-        return null;
+        Student existingStudent = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Student with ID " + id + " not found"));
+
+        existingStudent.setGroup(request.getGroup());
+        existingStudent.setAverageGrade(request.getAverageGrade());
+
+        Student updatedStudent = repository.save(existingStudent);
+
+        return mapper.toStudentUpdateDto(updatedStudent);
     }
 
     public void deleteStudent(String id) {
+        boolean exists = repository.existsById(id);
+        if (!exists) {
+            throw new NotFoundException("Student with ID " + id + " not found");
+        }
+
+        repository.deleteById(id);
     }
 }

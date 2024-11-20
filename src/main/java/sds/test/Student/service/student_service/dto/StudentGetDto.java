@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class StudentGetDto {
+    private String id;
     @JsonProperty("last_name")
     private String lastName;
     @JsonProperty("first_name")

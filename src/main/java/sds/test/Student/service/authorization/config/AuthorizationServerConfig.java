@@ -32,6 +32,7 @@ public class AuthorizationServerConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/oauth2/token").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)

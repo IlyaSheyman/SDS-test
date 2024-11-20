@@ -6,12 +6,6 @@ import lombok.Data;
 
 @Data
 public class StudentUpdateRequest {
-    @JsonProperty("last_name")
-    private String lastName;
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("middle_name")
-    private String middleName;
     private String group;
     @PositiveOrZero
     @JsonProperty("average_grade")
