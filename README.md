@@ -35,7 +35,7 @@ Retrieve an access token to authenticate API requests.
 	•	Method: POST
 	•	Authorization: Basic Auth (Username: root; Password: root)
 	•	Content-Type: application/x-www-form-urlencoded
-    •   Body: grant_type=client_credentials
+    	•   	Body: grant_type=client_credentials
 
 Response:
 ```
