@@ -2,16 +2,11 @@ package sds.test.Student.service.student_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
-
-import static sds.test.Student.service.student_service.constants.Constants.MAX_GRADE;
-import static sds.test.Student.service.student_service.constants.Constants.MIN_GRADE;
 
 @Data
 public class StudentAddRequest {
-
-    //TODO add schemas (everywhere)
 
     @NotBlank
     @JsonProperty("last_name")
@@ -28,7 +23,7 @@ public class StudentAddRequest {
     @NotBlank
     private String group;
 
-    @Size(min = MIN_GRADE, max = MAX_GRADE)
+    @PositiveOrZero
     @JsonProperty("average_grade")
     private Double averageGrade;
 

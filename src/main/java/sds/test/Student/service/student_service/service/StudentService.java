@@ -1,32 +1,53 @@
 package sds.test.Student.service.student_service.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sds.test.Student.service.student_service.dto.StudentAddRequest;
-import sds.test.Student.service.student_service.dto.StudentCreateDto;
-import sds.test.Student.service.student_service.dto.StudentGetDto;
-import sds.test.Student.service.student_service.dto.StudentUpdateDto;
+import sds.test.Student.service.student_service.dto.*;
+import sds.test.Student.service.student_service.exceptions.model.ConflictRequestException;
 import sds.test.Student.service.student_service.mapper.StudentMapper;
 import sds.test.Student.service.student_service.model.Student;
 import sds.test.Student.service.student_service.storage.StudentRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class StudentService {
     @Autowired
     private StudentRepository repository;
-    private StudentMapper mapper;
+    private final StudentMapper mapper;
 
     public List<StudentGetDto> getAllStudents() {
         return repository.findAll().stream().map(mapper::toStudentGetDto).toList();
     }
 
-    public StudentCreateDto addStudent(StudentAddRequest student) {
-        return null;
+    public StudentCreateDto addStudent(StudentAddRequest request) {
+        Optional<Student> existingStudent = repository.findByLastNameAndFirstNameAndMiddleName(
+                request.getLastName(),
+                request.getFirstName(),
+                request.getMiddleName()
+        );
+
+        if (existingStudent.isPresent()) {
+            throw new ConflictRequestException("Студент с таким сочетанием фамилии, имени и отчества уже существует");
+        }
+        Student newStudent = Student.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .middleName(request.getMiddleName())
+                .group(request.getGroup())
+                .averageGrade(request.getAverageGrade())
+                .build();
+
+        Student savedStudent = repository.save(newStudent);
+
+        return mapper.toStudentCreateDto(savedStudent);
+
     }
 
-    public StudentUpdateDto updateStudent(String id, Student student) {
+    public StudentUpdateDto updateStudent(String id, StudentUpdateRequest request) {
         return null;
     }
 
